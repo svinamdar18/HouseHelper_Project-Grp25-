@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration Page</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap.css'>
+    <script src='js/bootstrap.js'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+
+    <style>
+        h1 {
+            color: red;
+        }
+
+        .error {
+            color: red
+        }
+
+        body {
+            /* background-image: url("school1.jpg"); */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .margin {
+            margin-left: 500px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5 col-6">
+        <div id="myalert"></div>
+        <h1>Helper Registration </h1><br><br>
+        <form id="form" method="post">
+            <div class="form-group col-12">
+                <b>Name</b>
+                <input type="text" name="name" class="form-control" placeholder="Enter First Name and Last Name"><br>
+            </div>
+            <div>
+                <b>Gender</b><br>
+                <input type="radio" value="Male" name="gender"> Male
+                <input type="radio" value="Female" name="gender"> Female
+                <input type="radio" value="Other" name="gender"> Other
+
+                <br><br>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <b>DOB</b>
+                    <input type="date" name="dob" class="form-control" placeholder="Enter Your DOB"><br>
+                </div>
+                <div class="form-group col-6">
+                    <b>E-mail</b>
+                    <input type="text" name="email" class="form-control" placeholder="Enter Your Email Id"><br>
+                </div>
+
+                
+
+               <!-- <div class="row"> -->
+                    <div class="form-group col-6">
+                        <b>Service</b><br>
+                        <select class="form-control" name="services">
+                            <option selected disabled>Please Select</option>
+                            <option>Nanny</option>
+                            <option>Maid</option>
+                            <option>Gardener</option>
+                            <option>Pet care</option>
+
+                        </select>
+
+                    </div>
+                    <div class="form-group col-6">
+                        <b>Charges</b>
+                        <input type="text" name="charge" class="form-control" placeholder="Enter Service Charge"><br>
+                    </div>
+               <!--</div>--> 
+
+                <br><br>
+                <br><br>
+
+                <div class="form-group col-6">
+                    <b>Mobile</b>
+                    <input type="text" name="mobile" class="form-control" placeholder="Enter Mobile No."><br>
+                </div>
+
+
+
+
+                <div class="form-group col-12">
+                    <b>Address</b>
+                    <input type="" name="address" class="form-control" placeholder="Enter Your Address"><br>
+                    <!--   <textarea cols="88" rows="3"  value="address" required>   
+                </textarea> <br> -->
+                </div>
+
+
+
+
+
+
+
+
+                <span id="errorToShow"></span>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="ch" id="ch" value="checked">
+                    <label class="form-check-label">I accept Terms & Conditions</label><br>
+                    <span id="cherror"></span>
+                </div><br>
+                <div class="mt-2">
+                    <input type="submit" class="btn btn-success ms-2" id="submit" value="SUBMIT" disabled="true">
+                    <input type="reset" class="btn btn-success ms-2 ,button type=" reset class="btn btn-success ms-2">
+                </div>
+                <br><br>
+        </form>
+    </div>
+
+
+    <script>
+
+
+        $(document).ready(function () {
+            $("#inputTextBox").keypress(function (event) {
+                var inputValue = event.which;
+                // allow letters and whitespaces only.
+                if (!(inputValue >= 65 && inputValue <= 123) && (inputValue != 32 && inputValue != 0)) {
+                    event.preventDefault();
+                }
+                console.log(inputValue);
+            });
+        });
+
+        $(document).ready(() => {
+            $.validator.addMethod("emailonly", function (value, element) {
+                return this.optional(element) || /^([a-zA-Z0-9_\-\#\]+)\@([a-zA-Z]+)\.([a-zA-Z]{2,3})$/.test(value)
+            }, "Invalid Email")
+
+            $("#form").validate({
+                rules: {
+                    name: { required: true },
+                    email: { required: true, emailonly: true },
+                    mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
+                    dob: { required: true },
+                    gender: { required: true },
+                    address: { required: true },
+                    services: { required: true },
+                    charge: { required: true, digits: true, minlength: 3, maxlength: 6},
+                    //  occ:{required:true},
+                    //  std:{required:true},
+                    // div:{required:true}
+                },
+                messages: {
+                    name: { required: "Name is required" },
+                },
+                errorClass: "invalid-feedback is-invalid",
+                validClass: "is-valid",
+                errorPlacement: (error, element) => {
+                    if (element.attr("name") == "gen")
+                        error.appendTo("#errorToShow")
+                    else if (element.attr("name") == "ch")
+                        error.appendTo("#cherror")
+                    else
+                        error.insertAfter(element)
+                },
+                highlight: function (element) {
+                    $(element).fadeOut(function () {
+                        $(element).fadeIn();
+                        $(element).addClass("is-invalid");
+                    });
+                },
+                submitHandler: function (event) {
+                    // alert("data submitted")
+
+                    var values = {};
+                    $.each($('#form').serializeArray(), function (i, field) {
+                        values[field.name] = field.value;
+                    });
+                    let str = JSON.stringify(values)
+
+                    $("#myalert").append(`<div class="alert alert-success alert-dismissible" id="alertbox">
+                     Form Submitted Successfully        
+                     Data= ${str}          
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>`)
+                }
+            })
+
+            $("#ch").click(() => {
+                if ($("#ch").is(':checked'))
+                    $("#submit").removeAttr("disabled")
+                else
+                    $("#submit").attr("disabled", "true")
+            })
+        })
+
+    </script>
+</body>
+
+</html>
