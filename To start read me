@@ -3,6 +3,6 @@ in frontend folder cut paste the above 'public', 'src' folder in it
 along with that also cut paste thee files .gitignore , pakage-lock.json , package.json in it
 import 'tempProjectBackend' as a maven project in eclipse IDE on java 8
 open that frontend folder in VSC and on terminal run it first by initializing it
-open mysql workbench and import sql file in that 
+open mysql workbench and import sql file in that from database folder
 Run the project in eclipse IDE
 for any query add here below this.
